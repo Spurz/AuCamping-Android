@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_recherche"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="Recherche" />
+
+    <item
+        android:id="@+id/navigation_activite"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="Activités" />
+
+    <item
+        android:id="@+id/navigation_reservation"
+        android:icon="@drawable/ic_search_black_24dp"
+        android:title="Mes réservations" />
+
+    <item
+        android:id="@+id/navigation_compte"
+        android:icon="@drawable/ic_account_circle_black_24dp"
+        android:title="Compte" />
+
+</menu>
