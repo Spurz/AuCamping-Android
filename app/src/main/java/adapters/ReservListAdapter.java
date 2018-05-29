@@ -16,20 +16,21 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import entities.Emplacement;
+import entities.Reservation;
 
 /**
  * Created by student on 04/04/2018.
  */
 
-public class LocationListAdapter extends ArrayAdapter<Emplacement> {
+public class ReservListAdapter extends ArrayAdapter<Reservation> {
 
     private Context context;
-    private List<Emplacement> emplacements;
+    private List<Reservation> reservations;
 
-    public LocationListAdapter(Context context, List<Emplacement> emplacements){
-        super(context, R.layout.list_item, emplacements);
+    public ReservListAdapter(Context context, List<Reservation> reservations){
+        super(context, R.layout.list_item, reservations);
         this.context = context;
-        this.emplacements = emplacements;
+        this.reservations = reservations;
     }
 
     @NonNull
@@ -40,15 +41,15 @@ public class LocationListAdapter extends ArrayAdapter<Emplacement> {
         //Declaration du layout de la cellule
         View view = layoutInflater.inflate(R.layout.list_item, parent, false);
 
-        //Récupération de l'emplacement en question
-        Emplacement emplacement = emplacements.get(position);
+        //Récupération de la réservation en question
+        Reservation reservation = reservations.get(position);
 
         //Affichage des données dans le layout
         ImageView imageView = (ImageView) view.findViewById(R.id.image_view);
-        Picasso.with(getContext()).load(emplacement.getImageURL()).placeholder(R.mipmap.ic_launcher).into(imageView);
+        Picasso.with(getContext()).load(reservation.getImageURLReserv()).placeholder(R.mipmap.ic_launcher).into(imageView);
 
         TextView textView = (TextView) view.findViewById(R.id.text_view_title);
-        textView.setText(emplacement.getName());
+        textView.setText(reservation.getNameReserv());
         return view;
     }
 }

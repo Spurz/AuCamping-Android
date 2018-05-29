@@ -38,6 +38,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -56,6 +57,9 @@ public class MapSearchFragment extends Fragment {
     //Liste de mes emplacements
     private List<Emplacement> emplacements = new ArrayList<Emplacement>();
 
+    //Sert à associer mon objet au marqueur
+    HashMap<Marker, Emplacement> hashMap = new HashMap<Marker, Emplacement>();
+
 
     public MapSearchFragment() {
         // Required empty public constructor
@@ -68,8 +72,9 @@ public class MapSearchFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_map_search, container, false);
 
-        loadEmplacement();
 
+
+        //Initialisation de ma map
         if(mMapView == null) {
             mMapView = (MapView) v.findViewById(R.id.mapView);
             mMapView.onCreate(savedInstanceState);
@@ -88,19 +93,36 @@ public class MapSearchFragment extends Fragment {
             public void onMapReady(GoogleMap mMap) {
                 googleMap = mMap;
 
-                // For dropping a marker at a point on the Map
+                loadEmplacement();
+
+                //Initialisation de ma position
                 LatLng myPosition = new LatLng(42.674703,  2.848071);
-                // For zooming automatically to the location of the marker
+                //Zoom sur ma position
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(myPosition).zoom(19).build();
                 googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
+
+                googleMap.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+
+                        Emplacement emplacement = hashMap.get(marker);
+
+                        //Appel de ma fonction POST qui va me permettre de chargé l'évenement choisie grace à son ID
+                        Intent intent = new Intent(getActivity(), EmplacementDetailActivity.class);
+                        intent.putExtra("Emplacement",emplacement);
+                        startActivity(intent);
+
+                    }
+                });
             }
         });
 
         return v;
     }
 
+    //Fonction me permettant de chercher mes emplacements
     private void loadEmplacement(){
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest("http://10.0.2.2:8888/CampingIMERIR-WS/web/app_dev.php/emplacement",
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(getResources().getString(R.string.getEmplacement),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
@@ -118,21 +140,24 @@ public class MapSearchFragment extends Fragment {
                                 double lng = jsonObject.getDouble("long");
 
                                 emplacements.add(new Emplacement(id, name, imageURL, description_empla, lat, lng));
+                            }
 
-
-                                googleMap.addMarker(new MarkerOptions()
-                                        .title(name)
-                                        .snippet(description_empla)
+                            for (Emplacement emplacement : emplacements){
+                                Marker marker = googleMap.addMarker(new MarkerOptions()
+                                        .title(emplacement.getName())
+                                        .snippet(emplacement.getDescription_empla())
                                         .position(new LatLng(
-                                                lat,
-                                                lng
+                                                emplacement.getLat(),
+                                                emplacement.getLng()
                                         ))
                                 );
+                                hashMap.put(marker, emplacement);
                             }
 
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
                     }
                 },
                 new Response.ErrorListener() {
@@ -141,11 +166,8 @@ public class MapSearchFragment extends Fragment {
 
                     }
                 });
-
-        //creating a request queue
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-        //adding the string request to request queue
         requestQueue.add(jsonArrayRequest);
 
     }

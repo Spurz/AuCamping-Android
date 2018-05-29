@@ -1,15 +1,16 @@
 package com.example.student.campingimerir;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.GridView;
 import android.widget.ListAdapter;
@@ -27,61 +28,76 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-import adapters.LocationListAdapter;
-import entities.Emplacement;
+import adapters.ReservListAdapter;
+import entities.Reservation;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ReservationFragment extends Fragment {
+public class ReservFragment extends Fragment {
 
-    private GridView gridViewEmpla;
-    private List<Emplacement> emplacements = new ArrayList<Emplacement>();
-    private String url = "http://localhost:8888/CampingIMERIR-WS/web/app_dev.php/emplacement";
+    private GridView gridViewReserv;
+    private List<Reservation> reservations = new ArrayList<Reservation>();
     private Adapter adapter;
+    int id;
 
-    public ReservationFragment() {
+    public ReservFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_reservation, container, false);
+        View v = inflater.inflate(R.layout.fragment_reserv, container, false);
 
-        adapter = new LocationListAdapter(getActivity(), emplacements);
-        this.gridViewEmpla = (GridView) v.findViewById(R.id.gridViewEmplacement);
-        this.gridViewEmpla.setAdapter((ListAdapter) adapter);
+        setHasOptionsMenu(true);
 
-        loadEmplacement();
+        adapter = new ReservListAdapter(getActivity(), reservations);
+        this.gridViewReserv = (GridView) v.findViewById(R.id.gridViewReserv);
+        this.gridViewReserv.setAdapter((ListAdapter) adapter);
 
-        //emplacements.add(new Emplacement(1,"Emplacement 45", "http://recherche.newtonconcept.com/Justylive/vignette/vignette1.png", "blablabla"));
+        loadReserv();
 
         return v;
     }
 
-    private void loadEmplacement(){
-        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest("http://10.0.2.2:8888/CampingIMERIR-WS/web/app_dev.php/emplacement",
+    //Rendre les items du menu invisible
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        MenuItem item = menu.findItem(R.id.changeSearchList);
+        item.setVisible(false);
+
+        MenuItem item2 = menu.findItem(R.id.changeSearchMap);
+        item2.setVisible(false);
+    }
+
+    private void loadReserv (){
+
+        JsonArrayRequest jsonArrayRequest = new JsonArrayRequest(getResources().getString(R.string.getReserv),
                 new Response.Listener<JSONArray>() {
                     @Override
                     public void onResponse(JSONArray response) {
 
                         try {
+
+                            id = (PreferenceManager.getDefaultSharedPreferences(getActivity()).getInt("ID", 0));
                             //now looping through all the elements of the json array
                             for (int i = 0; i < response.length(); i++) {
+
                                 JSONObject jsonObject = response.getJSONObject(i);
 
-                                int id = jsonObject.getInt("id");
-                                String name = jsonObject.getString("nom_empla");
-                                String imageURL = jsonObject.getString("image");
-                                String description_empla = jsonObject.getString("type_empla");
-                                double lat = jsonObject.getDouble("lat");
-                                double lng = jsonObject.getDouble("long");
+                                int idReserv = jsonObject.getInt("id");
+                                String nameReserv = jsonObject.getString("nom_reserv");
+                                String imageURLReserv = jsonObject.getString("image_reserv");
+                                String descriptionReserv = jsonObject.getString("type_reserv");
+                                int idMembre = jsonObject.getInt("id_membre");
 
-                                emplacements.add(new Emplacement(id, name, imageURL, description_empla, lat, lng));
+                                if (idMembre == id){
+                                    reservations.add(new Reservation(idReserv, nameReserv, imageURLReserv, descriptionReserv, idMembre));
+                                }
+
                             }
 
                             ((ArrayAdapter) adapter).notifyDataSetChanged();
@@ -104,6 +120,5 @@ public class ReservationFragment extends Fragment {
 
         //adding the string request to request queue
         requestQueue.add(jsonArrayRequest);
-
     }
 }

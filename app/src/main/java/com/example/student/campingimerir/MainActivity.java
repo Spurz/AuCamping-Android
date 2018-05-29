@@ -1,6 +1,5 @@
 package com.example.student.campingimerir;
 
-import android.content.ClipData;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -11,7 +10,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
-
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -37,13 +35,19 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_reservation:
                     getFragmentManager()
                             .beginTransaction()
-                            .replace(R.id.content, new ReservationFragment())
+                            .replace(R.id.content, new ReservFragment())
                             .commit();
                     return true;
                 case R.id.navigation_compte:
                     getFragmentManager()
                             .beginTransaction()
                             .replace(R.id.content, new CompteFragment())
+                            .commit();
+                    return true;
+                case R.id.localisation:
+                    getFragmentManager()
+                            .beginTransaction()
+                            .replace(R.id.content, new LocalisationFragment())
                             .commit();
                     return true;
             }
@@ -85,7 +89,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.changeSearchList:
                 getFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.content, new ReservationFragment())
+                        .replace(R.id.content, new ListSearchFragment())
                         .commit();
                 return true;
         }

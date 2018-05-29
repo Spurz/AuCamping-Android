@@ -3,22 +3,27 @@
 
     <item
         android:id="@+id/navigation_recherche"
-        android:icon="@drawable/ic_search_black_24dp"
-        android:title="Recherche" />
+        android:icon="@drawable/ic_terrain_black_24dp"
+        android:title="Emplacements" />
 
     <item
         android:id="@+id/navigation_activite"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_today_black_24dp"
         android:title="Activités" />
 
     <item
         android:id="@+id/navigation_reservation"
-        android:icon="@drawable/ic_search_black_24dp"
+        android:icon="@drawable/ic_local_activity_black_24dp"
         android:title="Mes réservations" />
 
     <item
         android:id="@+id/navigation_compte"
         android:icon="@drawable/ic_account_circle_black_24dp"
         android:title="Compte" />
+
+    <item
+        android:id="@+id/localisation"
+        android:icon="@drawable/ic_location_on_black_24dp"
+        android:title="Localisation" />
 
 </menu>

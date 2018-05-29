@@ -8,4 +8,17 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
     <string name="google_maps_key">AIzaSyCTCcb5hnqkWw3dnmAVFqZlAaxxwQhi7-c</string>
+
+    <!--URL vers mon serveur-->
+    <string name="getEmplacement">http://10.0.2.2:8888/CampingIMERIR-WS/web/app_dev.php/emplacement</string>
+    <string name="getActivite">http://10.0.2.2:8888/CampingIMERIR-WS/web/app_dev.php/activite</string>
+    <string name="getMembre">http://10.0.2.2:8888/CampingIMERIR-WS/web/app_dev.php/membre</string>
+    <string name="getReserv">http://10.0.2.2:8888/CampingIMERIR-WS/web/app_dev.php/reserv</string>
+
+
+
+
+
+
+
 </resources>

@@ -1,10 +1,12 @@
 package entities;
 
+import java.io.Serializable;
+
 /**
  * Created by student on 04/04/2018.
  */
 
-public class Emplacement {
+public class Emplacement implements Serializable {
 
     private int id;
     private String name;
